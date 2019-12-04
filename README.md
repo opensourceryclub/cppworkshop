@@ -227,10 +227,11 @@ file. In dog.hpp, write the following:
 #define DOG_H
 ```
 
-This is a bit uncommon -- lines that have a # are instructions directly to
-the compiler. In this case, we're telling it "is DOG_H" defined? If not,
-define it!" This is important because otherwise if multiple files include
-dog.hpp, you'd end up declaring the dog class multiple times.
+This is a bit uncommon -- lines that start with # are instructions directly
+to the compiler. In this case, we're telling it "is DOG_H" defined? If not,
+define it with the following!" This is important because otherwise if
+multiple files include dog.hpp, you'd end up declaring the dog class
+multiple times.
 
 ```cpp
 #include <string>
@@ -289,9 +290,8 @@ dog::dog(string nameIn, string breedIn){
 
 ``dog::dog`` is saying "in the dog class, we're talking about the dog
 constructor." This is then followed by the arguments. Watch out, the
-arguments
-have to exactly like the ones in the header file, or it will cause
-errors on compilation. Now lets implement the getters.
+arguments have to be exactly like the ones in the header file, or it will
+cause errors on compilation. Now lets implement the getters.
 
 ```cpp
 string dog::getName(){
@@ -381,16 +381,28 @@ folder to explain. It looks like this:
 
 ```cpp
 #include <iostream>
-#include "include/dog.hpp"
-// This is including the dog class, which is in the dog.hpp and dog.cpp files
+#include "doglib.hpp"
+// This is including the dog class, which is in the dog.hpp and doglib.cpp files.
+//doglib is exactly the same as dog.cpp, but without the main function
 
 using namespace std;
 
+void multiplyByTwo(int* inpt){
+	*inpt = *inpt * 2;
+}
+
 int main(){
-	dog dog1 = dog(string("Sam")); //Constructing a dog named Sam
-	dog* dog2 = new dog(string("Pico")); //Constructing a dog named Toby, and getting it's pointer.
+	dog dog1 = dog("Sam","German Shepard"); // Construct a dog named Sam
+	dog* dog2 = new dog("Pico","Pug"); //Construct a dog named Toby, and get it's pointer.
 	cout << dog1.getName() << endl;
 	cout << dog2->getName() << endl;
+	int* p = &i;
+	cout << *p + 2 << endl;
+	cout << "Original value: " << *p << endl;
+	multiplyByTwo(p);
+	cout << "New value: " << *p << endl;
+
+	delete dog2;
 }
 ```
 
@@ -416,4 +428,54 @@ Well, ``new dog()`` is basically saying "create the dog object." No
 weirdness there, but then why is ``dog2`` a ``dog*`` variable? Well, when
 you use new to create an object, it doesn't actually return the object
 itself. Instead it returns what's called a pointer, which is object's
-address, rather than the object itself.
+address, rather than the object itself. If you've used Java, in that
+language pretty much every variable that's not a primitive is a "pointer." In
+C++, though, you have to explicitly state the difference. You can also get
+the address of a variable -- or the pointer -- like this
+
+```cpp
+dog* dogPointer = &dog1;
+```
+
+You can even take this to it's logical extreme like this:
+
+```cpp
+dog** dogPointerPointer = &dogPointer;
+```
+
+That's a pointer of a pointer. After all, pointers take up memory too! They
+have addresses! You can also do get the pointer of primitive types, as shown
+in.
+
+```cpp
+int* p = &i
+```
+
+From there, you can get pointee but putting a ``*`` before the name.
+
+```cpp
+cout << *p + 2 << endl;
+```
+
+Finally, at the end, we have to include the following line
+
+```cpp
+delete dog2;
+```
+
+We created the ``dog2`` variable with ``new``, which means unless we do
+something ``dog2`` will just be floating around in the void of our memory,
+it won't get deleted once we exit the scope. We need that space for other
+stuff! So we have to explicitly delete it. In this specific case it's not
+entirely neccesary, since the program ends, but it's important to remember
+this when making larger projects.
+
+### Why Use Pointers?
+
+Well, once of the cool things about pointers is their pointees mutable. You can
+make a function that takes in a pointer and then edits that object directly,
+rather than having to mess around with creating a copy and then returning
+it. You can see that when p is passed into
+multiplyByTwo, but multiplyByTwo doesn't return anything. Instead it
+directly manipulates p. It also allows for stuff like two objects referencing each other without
+creating an infinite loop.

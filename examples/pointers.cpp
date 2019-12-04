@@ -1,16 +1,26 @@
 #include <iostream>
 #include <string>
 #include "dog.hpp"
-// This is including the dog class, which is in the dog.hpp and dog.cpp files
+
+// This is including the dog class, which is in the dog.hpp and doglib.cpp files.
+//doglib is exactly the same as dog.cpp, but without the main function
 
 using namespace std;
 
+void multiplyByTwo(int* inpt){
+	*inpt = *inpt * 2;
+}
+
 int main(){
 	int i = 4;
-	int* p = &i;
-	cout << *p + 4 << endl;
-	dog dog1 = dog(string("Sam"), "German Shepard"); //Constructing a dog named Sam
-	dog* dog2 = new dog(string("Pico"), "Pug"); //Constructing a dog named Toby, and getting it's pointer.
+	dog dog1 = dog("Sam","German Shepard"); // Construct a dog named Sam
+	dog* dog2 = new dog("Pico","Pug"); //Construct a dog named Toby, and get it's pointer.
 	cout << dog1.getName() << endl;
 	cout << dog2->getName() << endl;
+	int* p = &i;
+	cout << *p + 2 << endl;
+	cout << "Original value: " << *p << endl;
+	multiplyByTwo(p);
+	cout << "New value: " << *p << endl;
+	delete dog2;
 }
