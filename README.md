@@ -32,19 +32,23 @@ something like [CMake](https://cmake.org/) makes things much simpler. IDEs
 may have something built in to do this easier, but for this we'll just be
 using gcc and a text editor. Anything from notepad to vim will do.
 
-## Hello World First Draft
+## Cats!
 
-### Writing
+Today, we'll be making a program that lets you play with cats, 'cause aren't
+they the cutest?
 
-First things first, let's create a simple HelloWorld program. There's one
+### Starting
+
+First things first, let's create the barebones of the program. There's one
 available in this git repo in the examples folder, or you can just follow
 along!
 
 ```cpp
 #include <iostream>
+#include <string>
 ```
-Should go at the top of the file. ``#include <iostream>`` tells the
-compiler to, well, include the iostream library. Next:
+Should go at the top of the file. ``#include`` tells the
+compiler to, well, include the given library. Next:
 ```cpp
 int main(){
 // Code goes here
@@ -53,8 +57,8 @@ int main(){
 This is the main function, which will run when we run the binary file.
 Replace ``// Code goes here`` with the following:
 ```cpp
-std::cout << "Hello world!";
-std::cout << std::endl;
+std::cout << "What's the cat's name?" << std::endl;
+
 return 0;
 ```
 The ``<<`` operator here is used as a stream insertion operator.
@@ -81,156 +85,80 @@ That file is executable, so just run it with
 ``
 ./bin
 ``
-kf on Linux/Mac, or
+if on Linux/Mac, or
 ``
 .\bin
 ``
 if on windows.
 You shoud get the following output:
 ```
-Hello world!
+"What's the cat's name?"
 ```
-
-### Slimming down the code
-
-That code wasn't perfect, though. Let's look at the whole thing again:
-
-```cpp
-#include <iostream>
-
-int main(){
-	std::cout << "Hello world!";
-	std::cout << std::endl;
-	return 0;
-}
-```
-
-First of all, two lines to print is a bit wordy, isn't it? Luckily, the
-``<<`` operator can "chain." So replace those two lines with:
-```cpp
-std::cout << "Hello world!" << std::endl;
-```
-Cool, eh? But aren't those pesky ``std::``'s a bit annyoing? Well, luckily,
-we can get rid of those by putting the following line of code after the
-include statement(s):
-
-```cpp
-using namespace std;
-```
-This just tells the code to include everything in the std namespace
-automatically. Now our line of code can look like:
-```cpp
-cout << "Hello world!" << endl;
-```
-Much nicer!
 
 ## User Input
 
-Lets make a somewhat more complicated program, now. One that
-takes in a number from the user, and checks if it's even or odd. Start out
-just like hello world:
+We haven't made much more than hello world, though. Let's make it take in
+the user's name! Remember, this is what we have:
+
 ```cpp
 #include <iostream>
-using namespace std;
+#include <string>
 
 int main(){
-	// Code goes here
-}
-```
-Now, for the actual code. First, let's create an integer variable.
-```cpp
-int inpt;
-```
-If you've used java before, this syntax should be looking similar. For the
-purposes of examples, I'll also create the check variable:
-```cpp
-int check = 2;
-```
-This will be the the number we check if the input is divisible by. Now, time
-to prompt the user:
-```cpp
-cout << "Input a number: ";
-```
-If we don't add an ``endl``, the input will be placed on the same line,
-which feels right. Now, to get the actual input:
-```cpp
-cin >> inpt;
-```
-``>>`` is the opposite of ``<<``. Rather than inserting something from a
-stream, it extracts it. Don't forget to end the line after this.
-```cpp
-cout << endl;
-```
-Nice! Now, let's use that input. If statments are similar to most languages,
-so I'll go through that more quickly!
-```cpp
-if ((inpt % 2) == 0){
-	cout << "It's even!";
-}
-else{
-	cout << "It's odd!";
-}
-cout << endl;
-```
-Finally, add the last return line:
-```cpp
-return 0;
-```
-Now, the entire program should look like this:
-```cpp
-#include <iostream>
+	std::cout << "What's the cat's name?" << std::endl;
 
-using namespace std;
-
-int main(){
-	int check = 2;
-	int inpt;
-	cout << "Input a number: ";
-	cin >> inpt;
-	cout << endl;
-	if ((inpt % check) == 0) {
-		cout << "It's even!";
-	}
-	else {
-		cout << "It's odd!";
-	}
-	cout << endl;
 	return 0;
 }
 ```
-Compile it the same way as before:
-```bash
-g++ -o bin2 <filename>
+First, let's create a string variable above the output.
+```cpp
+std::string name;
 ```
-and run the bin2 file!
-You're output should look like:
+If you've used java before, this syntax should be looking similar, except
+for that pesky ``std::``. That's going to get annoying to type, so after
+the include statements add
+```cpp
+using namespace std;
 ```
-Input a number: 2
-It's even!
+Now we don't have to keep typing that over and over again! This is just
+saying "automatically use namespace std." In some contexts, this can be
+dangerous, but here it's fine. Delete all those ``std::``'s now!
+Now, to get the actually get the user input:
+```cpp
+cin >> name;
 ```
-or
-```
-Input a number: 3
-It's odd!
-```
-Pretty simple!
+``>>`` is the opposite of ``<<``. Rather than inserting something from a
+stream, it extracts it. You don't need to end the line here.
 
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main(){
+	string name;
+	cout << "What's the cat's name?";
+	cin >> name;
+
+	return 0;
+}
+```
 ## Header Files
 
 Header files are very important in C++. They let you declare the details of
-classes outside of their implementations. Make two files: one named
-``dog.cpp`` and one named ``dog.hpp``. The ``dog.hpp`` file is a header
-file. In dog.hpp, write the following:
+classes outside of their implementations. Make a file called``cat.hpp``. The
+``cat.hpp`` file is a header file. In cat.hpp, write the following:
 
 ```cpp
-#ifndef DOG_H
-#define DOG_H
+#ifndef CAT_H
+#define CAT_H
 ```
 
 This is a bit uncommon -- lines that start with # are instructions directly
-to the compiler. In this case, we're telling it "is DOG_H" defined? If not,
+to the compiler. In this case, we're telling it "is CAT_H" defined? If not,
 define it with the following!" This is important because otherwise if
-multiple files include dog.hpp, you'd end up declaring the dog class
+multiple files include cat.hpp, you'd end up declaring the cat class
 multiple times.
 
 ```cpp
@@ -241,92 +169,95 @@ This is just telling it to include the string and input/output libraries.
 Then, we're going to define a class:
 
 ```cpp
-class dog{
+class cat{
 	public:
-		dog(std::string nameIn, std::string breedIn);
-		std::string getName();
-		std::string getBreed();
+		cat(std::string nameIn, std::string breedIn);
+		std::string describe();
+		std::string makeNoise();
 	private:
 		std::string name;
 		std::string breed;
 }
 ```
 
-If you've done object oriented-programming before, this should look
-somewhat familiar. Note that we haven't actually defined any of the
-variables or methods, just declared them. And uh oh, the ``std::``'s are
-back! Well, we could use ``using namespace std;`` in a header file, but
-it's frowned upon because it's prone to cause errors. Better safe than
-sorry. Before we're done with this file, add the following to end:
+If you've done object oriented-programming before, this should look somewhat
+familiar. Note that we haven't actually defined any of the variables or
+methods, just declared them. And uh oh, the ``std::``'s are back! Well, we
+could use ``using namespace std;`` in a header file, but it's frowned upon
+because it's prone to cause errors. Better safe than sorry. Before we're
+done with this file, add the following to end:
 
 ```cpp
 #endif
 ```
 
-Remember that question we asked the compiler earlier? "Is DOG_H"
+Remember that question we asked the compiler earlier? "Is CAT_H"
 defined?  This is just telling it we're done with that now. It's like a
-``}``. Now onto the cpp file. Start if off with this
-
+``}``. Now back to the cpp file. First things first, we need the header file
+we wrote!
 ```cpp
-#include "dog.hpp"
+#include "cat.hpp"
 ```
 
-No need to include <iostream\>, since we already included it in dog.hpp.
-
-We're also free to use std by default, so add this.
-
-```cpp
-using namespace std;
-```
-
-Now then, how do we actually implement the class?
+Now we need to actually implement the class.
+Well, before the main function, add this.
 
 ```cpp
-dog::dog(string nameIn, string breedIn){
+cat::cat(string nameIn, string breedIn){
 	name = nameIn;
 	breed = breedIn;
 }
 ```
 
-``dog::dog`` is saying "in the dog class, we're talking about the dog
-constructor." This is then followed by the arguments. Watch out, the
-arguments have to be exactly like the ones in the header file, or it will
-cause errors on compilation. Now lets implement the getters.
+``cat::cat`` is saying "in the cat class, I'm defining the constructor."
+This is then followed by the arguments. Watch out, the arguments have to be
+exactly like the ones in the header file, or it will cause errors on
+compilation. Now lets implement the describe function.
 
 ```cpp
-string dog::getName(){
-	return name;
-}
-
-string dog::getBreed(){
-	return breed;
+string cat::describe(){
+	string out = name.append(" is a ").append(breed).append(" cat!");
+	return out;
 }
 ```
 
-Finally, a main function!
+And the makeNoise function!
+
+```cpp
+string cat::makeNose(){
+	return "Purr!"
+}
+```
+
+Finally, let's test it in the main function!
 
 ```cpp
 int main(){
-	dog testDog = dog("Pico","Pug");
-	cout << testDog.getName() << endl;
-	cout << testDog.getBreed() << endl;
+	string name;
+	cout << "What's the cat's name?";
+	cin >> name;
+	cat cat1 = cat(name,"snowshoe");
+	cout << cat1.describe() << endl;
+
+	return 0;
+
 }
 ```
 
-So, the full files look like this!
+If you use java, you might have noticed the lack of "new" to create an object. Well, "new" actually does something else in C++, actually! To just create an object, we don't need it. So, the full files look like this!
 
-dog.hpp:
+cat.hpp:
 ```cpp
-#ifndef DOG_H
-#define DOG_H
+#ifndef CAT_H
+#define CAT_H
 #include <string>
 #include <iostream>
 
-class dog{
+class cat{
 	public:
-		dog(std::string nameIn, std::string breedIn);
-		std::string getName();
-		std::string getBreed();
+		cat(std::string nameIn, std::string breedIn);
+		std::string describe();
+		std::string makeSound();
 	private:
 		std::string name;
 		std::string breed;
@@ -334,41 +265,94 @@ class dog{
 #endif
 ```
 
-dog.cpp:
+cat.cpp:
 ```cpp
-#include "dog.hpp"
+#include "cat.hpp"
 
 using namespace std;
-dog::dog(string nameIn, string breedIn){
+cat::cat(string nameIn, string breedIn){
 	name = nameIn;
 	breed = breedIn;
 }
 
-string dog::getName(){
-	return name;
+string cat::describe(){
+	string out = name.append(" is a ").append(breed).append(" cat!");
+	return out;
 }
 
-string dog::getBreed(){
-	return breed;
+string cat::makeSound(){
+	return "Purr!"
 }
 
 int main(){
-	dog testDog = dog("Pico","Pug");
-	cout << testDog.getName() << endl;
-	cout << testDog.getBreed() << endl;
+	string name;
+	cout << "What's the cat's name?";
+	cin >> name;
+	cout << endl;
+	cat cat1 = cat(name,"snowshoe");
+	cout << cat1.describe() << endl;
+	cout << cat1.makeNoise() << endl;
+
+	return 0;
+
 }
 ```
 Compile it with
 
 ```bash
-g++ -o binDog dog.cpp
+g++ -o bin cat.cpp
 ```
 
-and run the ``binDog`` file! You should get:
+and run the ``bin`` file! You should get:
 
 ```
-Pico
-Pug
+What's the cat's name? <Input>
+<Input> is a snowshoe cat!
+Purr!
+```
+
+Hmm... just for fun, let's make it a little more complex.  Let's move the
+current main into a seperate function and build most of the interface
+seperately. Most everything from here is pretty much java syntax.
+
+```cpp
+cat makeCat(){
+	cout << "What should it's name be? "
+	cin >> name;
+	cout << "It's breed? ";
+	cin >> breed;
+	return cat(name,breed);
+}
+
+
+int main(){
+	bool done = false;
+	string cmd;
+	string name;
+	string breed;
+	cat yourCat = makeCat();
+	while (!done){
+		cout << "Please input a command (new, pet, look, or done): ";
+		cin >> cmd;
+		if (cmd == "new"){
+			yourCat = makeCat();
+		}
+		elif (cmd == "pet"){
+			cout <<	yourCat.makeSound() << endl;
+
+		}
+		elif (cmd == "done"){
+			cout << "Thanks for playing!" << endl;
+			done = true;
+		}
+		elif (cmd == "look"){
+			cout << yourCat.describe() << endl;
+		}
+		else{
+			cout << "That isn't a command." << endl;
+		}
+	}
+}
 ```
 
 ## Pointers
@@ -381,28 +365,44 @@ folder to explain. It looks like this:
 
 ```cpp
 #include <iostream>
-#include "doglib.hpp"
-// This is including the dog class, which is in the dog.hpp and doglib.cpp files.
-//doglib is exactly the same as dog.cpp, but without the main function
+#include "cat.hpp"
 
 using namespace std;
+
+cat::cat(string nameIn, string breedIn){
+	name = nameIn;
+	breed = breedIn;
+}
+
+string cat::getName(){
+	return name;
+}
+
+string cat::getBreed(){
+	return breed;
+}
+
+string cat::makeNoise(){
+	return "Purr!"
+}
 
 void multiplyByTwo(int* inpt){
 	*inpt = *inpt * 2;
 }
 
 int main(){
-	dog dog1 = dog("Sam","German Shepard"); // Construct a dog named Sam
-	dog* dog2 = new dog("Pico","Pug"); //Construct a dog named Toby, and get it's pointer.
-	cout << dog1.getName() << endl;
-	cout << dog2->getName() << endl;
+	cat cat1 = cat("Isabelle","Tabby"); // Construct a cat named
+	Isabelle
+	cat* cat2 = new cat("Otto","Raas"); //Construct a cat named Otto, and get it's pointer.
+	cout << cat1.getName() << endl;
+	cout << cat2->getName() << endl;
 	int* p = &i;
 	cout << *p + 2 << endl;
 	cout << "Original value: " << *p << endl;
 	multiplyByTwo(p);
 	cout << "New value: " << *p << endl;
 
-	delete dog2;
+	delete cat2;
 }
 ```
 
@@ -414,18 +414,18 @@ answer is pointers!
 Let's look at what happens when we don't use a pointer.
 
 ```cpp
-dog dog1 = dog(string("Sam"));
+cat cat1 = cat(string("Isabelle"));
 ```
 
-This is saying "alright, I want a variable called dog1 to contain a dog
-object with the name "Sam." So, what's with the other one?
+This is saying "alright, I want a variable called cat1 to contain a cat
+object with the name "Isabelle." So, what's with the other one?
 
 ```cpp
-dog* dog2 = new dog(string("Pico"));
+cat* cat2 = new cat(string("Otto"));
 ```
 
-Well, ``new dog()`` is basically saying "create the dog object." No
-weirdness there, but then why is ``dog2`` a ``dog*`` variable? Well, when
+Well, ``new cat()`` is basically saying "create the cat object." No
+weirdness there, but then why is ``cat2`` a ``cat*`` variable? Well, when
 you use new to create an object, it doesn't actually return the object
 itself. Instead it returns what's called a pointer, which is object's
 address, rather than the object itself. If you've used Java, in that
@@ -434,24 +434,24 @@ C++, though, you have to explicitly state the difference. You can also get
 the address of a variable -- or the pointer -- like this
 
 ```cpp
-dog* dogPointer = &dog1;
+cat* catPointer = &cat1;
 ```
 
 You can even take this to it's logical extreme like this:
 
 ```cpp
-dog** dogPointerPointer = &dogPointer;
+cat** catPointerPointer = &catPointer;
 ```
 
 That's a pointer of a pointer. After all, pointers take up memory too! They
-have addresses! You can also do get the pointer of primitive types, as shown
+have addresses! You can also get the pointer of primitive types, as shown
 in.
 
 ```cpp
 int* p = &i
 ```
 
-From there, you can get pointee but putting a ``*`` before the name.
+From there, you can get pointee by putting a ``*`` before the name.
 
 ```cpp
 cout << *p + 2 << endl;
@@ -460,11 +460,11 @@ cout << *p + 2 << endl;
 Finally, at the end, we have to include the following line
 
 ```cpp
-delete dog2;
+delete cat2;
 ```
 
-We created the ``dog2`` variable with ``new``, which means unless we do
-something ``dog2`` will just be floating around in the void of our memory,
+We created the ``cat2`` variable with ``new``, which means unless we do
+something ``cat2`` will just be floating around in the void of our memory,
 it won't get deleted once we exit the scope. We need that space for other
 stuff! So we have to explicitly delete it. In this specific case it's not
 entirely neccesary, since the program ends, but it's important to remember
@@ -472,10 +472,12 @@ this when making larger projects.
 
 ### Why Use Pointers?
 
-Well, once of the cool things about pointers is their pointees mutable. You can
-make a function that takes in a pointer and then edits that object directly,
-rather than having to mess around with creating a copy and then returning
-it. You can see that when p is passed into
-multiplyByTwo, but multiplyByTwo doesn't return anything. Instead it
-directly manipulates p. It also allows for stuff like two objects referencing each other without
-creating an infinite loop.
+Well, once of the cool things about pointers is their pointees are mutable.
+You can make a function that takes in a pointer and then edits that object
+directly, rather than having to mess around with creating a copy and then
+returning it. You can see that when p is passed into multiplyByTwo, but
+multiplyByTwo doesn't return anything. Instead it directly manipulates p. It
+also allows for stuff like two objects referencing each other without
+creating an infinite loop. It also makes it a lot easier on the memory to be
+tossing about addresses rather than full objects, so it's part of efficient
+coding.
